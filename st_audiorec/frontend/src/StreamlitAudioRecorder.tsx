@@ -54,10 +54,22 @@ class StAudioRec extends StreamlitComponentBase<State> {
     }
   };
 
+
   private startRecording = async () => {
     try {
+      // Attempt to use Opus codec in a WebM container, widely supported including Chrome
+      const preferredType = 'audio/webm; codecs=opus';
+      const options = { mimeType: preferredType };
+
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      this.mediaRecorder = new MediaRecorder(stream);
+      // Check if the browser supports the preferred MIME type
+      if (MediaRecorder.isTypeSupported(preferredType)) {
+        this.mediaRecorder = new MediaRecorder(stream, options);
+      } else {
+        // Fallback to default mimeType if preferred is not supported
+        this.mediaRecorder = new MediaRecorder(stream);
+      }
+
       this.audioChunks = [];
 
       this.mediaRecorder.addEventListener("dataavailable", (event) => {
@@ -65,7 +77,8 @@ class StAudioRec extends StreamlitComponentBase<State> {
       });
 
       this.mediaRecorder.addEventListener("stop", () => {
-        const audioBlob = new Blob(this.audioChunks, { type: "audio/wav" });
+        // Use the mimeType from the mediaRecorder instance to ensure consistency
+        const audioBlob = new Blob(this.audioChunks, { type: options.mimeType });
         const audioDataURL = URL.createObjectURL(audioBlob);
         this.setState({ audioDataURL });
 

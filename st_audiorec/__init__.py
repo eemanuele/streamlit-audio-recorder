@@ -1,34 +1,34 @@
 import os
-import numpy as np
-import streamlit as st
 from io import BytesIO
+
+import numpy as np
 import streamlit.components.v1 as components
 
 
 def st_audiorec():
-    # get parent directory relative to current directory
+    # Get the parent directory relative to the current file's location
     parent_dir = os.path.dirname(os.path.abspath(__file__))
-    # Custom REACT-based component for recording client audio in browser
+    # Path to the build directory of the custom REACT-based audio recording component
     build_dir = os.path.join(parent_dir, "frontend/build")
-    # specify directory and initialize st_audiorec object functionality
+    # Declare the Streamlit component with its frontend build directory
     st_audiorec = components.declare_component("st_audiorec", path=build_dir)
 
-    # Create an instance of the component: STREAMLIT AUDIO RECORDER
-    raw_audio_data = (
-        st_audiorec()
-    )  # raw_audio_data: stores all the data returned from the streamlit frontend
-    ogg_bytes = None
+    # Create an instance of the audio recorder component
+    raw_audio_data = st_audiorec()  # Stores all the data returned from the frontend
 
-    # the frontend returns raw audio data in the form of arraybuffer
-    # (this arraybuffer is derived from web-media API WAV-blob data)
+    # Initialize variable to hold the processed audio data
+    webm_bytes = None
 
+    # Check if the frontend returned audio data in the expected format
     if isinstance(raw_audio_data, dict) and "arr" in raw_audio_data:
+        # Unpack the dictionary items and sort them based on the keys to ensure correct order
         ind, raw_audio_data = zip(*raw_audio_data["arr"].items())
-        ind = np.array(ind, dtype=int)  # convert to np array
-        raw_audio_data = np.array(raw_audio_data)  # convert to np array
-        sorted_ints = raw_audio_data[ind]
+        ind = np.array(ind, dtype=int)  # Convert keys to a numpy array for indexing
+        raw_audio_data = np.array(raw_audio_data)  # Convert values to a numpy array
+        sorted_ints = raw_audio_data[ind]  # Reorder the array based on the keys
+        # Create a bytes stream from the ordered integers
         stream = BytesIO(b"".join([int(v).to_bytes(1, "big") for v in sorted_ints]))
-        # ogg_bytes contains audio data in byte format, ready to be processed further
-        ogg_bytes = stream.read()
+        webm_bytes = stream.read()  # Read the bytes stream into a bytes object
 
-    return ogg_bytes
+    # Return the audio data in WebM format with Opus codec
+    return webm_bytes
