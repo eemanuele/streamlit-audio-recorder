@@ -23,13 +23,12 @@ def st_audiorec():
     # (this arraybuffer is derived from web-media API WAV-blob data)
 
     if isinstance(raw_audio_data, dict) and "arr" in raw_audio_data:
-        with st.spinner("retrieving audio-recording..."):
-            ind, raw_audio_data = zip(*raw_audio_data["arr"].items())
-            ind = np.array(ind, dtype=int)  # convert to np array
-            raw_audio_data = np.array(raw_audio_data)  # convert to np array
-            sorted_ints = raw_audio_data[ind]
-            stream = BytesIO(b"".join([int(v).to_bytes(1, "big") for v in sorted_ints]))
-            # ogg_bytes contains audio data in byte format, ready to be processed further
-            ogg_bytes = stream.read()
+        ind, raw_audio_data = zip(*raw_audio_data["arr"].items())
+        ind = np.array(ind, dtype=int)  # convert to np array
+        raw_audio_data = np.array(raw_audio_data)  # convert to np array
+        sorted_ints = raw_audio_data[ind]
+        stream = BytesIO(b"".join([int(v).to_bytes(1, "big") for v in sorted_ints]))
+        # ogg_bytes contains audio data in byte format, ready to be processed further
+        ogg_bytes = stream.read()
 
     return ogg_bytes

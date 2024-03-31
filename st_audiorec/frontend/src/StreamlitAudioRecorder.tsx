@@ -28,21 +28,20 @@ interface State {
 class StAudioRec extends StreamlitComponentBase<State> {
   private mediaRecorder: MediaRecorder | null = null;
   private audioChunks: Blob[] = [];
-
   public state = { isRecording: false, audioDataURL: "" };
 
   public render = (): ReactNode => {
     const { isRecording } = this.state;
     return (
-      <span>
-        <button onClick={this.toggleRecording}>
-          {isRecording ? (
-            <span>&#9632;</span> // Stop symbol
-          ) : (
-            <span>&#127908;</span> // Microphone symbol
-          )}
-        </button>
-      </span>
+    <span>
+      <button
+        className={`button ${isRecording ? "recording" : ""}`}
+        onClick={this.toggleRecording}
+        style={{ width: "95%" }}
+      >
+        {!isRecording ? "🎙️" : "⬛"} {/* Use square for stop symbol */}
+      </button>
+    </span>
     );
   };
 
