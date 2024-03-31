@@ -37,7 +37,7 @@ class StAudioRec extends StreamlitComponentBase<State> {
       <button
         className={`button ${isRecording ? "recording" : ""}`}
         onClick={this.toggleRecording}
-        style={{ width: "95%" }}
+        style={{ width: "97%" }}
       >
         {!isRecording ? "🎙️" : "⬛"} {/* Use square for stop symbol */}
       </button>
