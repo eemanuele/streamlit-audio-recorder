@@ -32,25 +32,25 @@ def audiorec_demo_app():
 
     # TUTORIAL: How to use STREAMLIT AUDIO RECORDER?
     # by calling this function an instance of the audio recorder is created
-    # once a recording is completed, audio data will be saved to wav_audio_data
+    # once a recording is completed, audio data will be saved to ogg_audio_data
 
-    wav_audio_data = st_audiorec() # tadaaaa! yes, that's it! :D
+    ogg_audio_data = st_audiorec() # tadaaaa! yes, that's it! :D
 
     # add some spacing and informative messages
     col_info, col_space = st.columns([0.57, 0.43])
     with col_info:
         st.write('\n')  # add vertical spacer
         st.write('\n')  # add vertical spacer
-        st.write('The .wav audio data, as received in the backend Python code,'
+        st.write('The .ogg audio data, as received in the backend Python code,'
                  ' will be displayed below this message as soon as it has'
                  ' been processed. [This informative message is not part of'
                  ' the audio recorder and can be removed easily] 🎈')
 
-    if wav_audio_data is not None:
+    if ogg_audio_data is not None:
         # display audio data as received on the Python side
         col_playback, col_space = st.columns([0.58,0.42])
         with col_playback:
-            st.audio(wav_audio_data, format='audio/wav')
+            st.audio(ogg_audio_data)
 
 
 if __name__ == '__main__':
