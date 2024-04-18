@@ -3,3 +3,4 @@
 node_modules/
 __pycache__
 streamlit_audiorec.egg-info/
+poetry.lock
